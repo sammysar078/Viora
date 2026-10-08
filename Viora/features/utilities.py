@@ -1,6 +1,5 @@
 import re, io, math, ast, operator, aiohttp, os, tempfile, subprocess
 from pyrogram import filters
-from pyrogram.types import InputSticker
 from Viora.core.common import target_from_reply,mention,amount
 OPS={ast.Add:operator.add,ast.Sub:operator.sub,ast.Mult:operator.mul,ast.Div:operator.truediv,ast.Mod:operator.mod,ast.Pow:operator.pow,ast.USub:operator.neg}
 def calc_node(n):
@@ -109,23 +108,9 @@ async def register(app,c):
  @app.on_message(filters.command('own'))
  async def own(_,m):
   src=m.reply_to_message
-  if not src:return await m.reply('🎨 Reply to a photo/sticker/video and use /own to create your personal Viora sticker pack.')
-  try:
-   from pyrogram.types import InputSticker
-   path=await src.download()
-   from PIL import Image
-   img=Image.open(path).convert('RGBA'); img.thumbnail((512,512))
-   webp=tempfile.NamedTemporaryFile(suffix='.webp',delete=False).name; img.save(webp,'WEBP')
-   username=c['config'].BOT_USERNAME.lower()
-   pack=f'viora_{m.from_user.id}_by_{username}'
-   title=f'{m.from_user.first_name} • Viora'[:64]
-   stickers=[InputSticker(sticker=webp,emoji_list=['✨'])]
-   await app.create_sticker_set(m.from_user.id,pack,title,stickers)
-   await m.reply(f'🎨 Sticker pack created!\nhttps://t.me/addstickers/{pack}')
-  except Exception:
-   await m.reply('❌ Could not create the sticker pack. Reply to a static photo/sticker and try again; the bot must be allowed to create sticker sets.')
-  finally:
-   for f in locals().get('webp',''),locals().get('path',''):
-    try:
-     if f and os.path.exists(f): os.unlink(f)
-    except Exception: pass
+  if not src:
+   return await m.reply('🎨 Reply to a photo or sticker and use /own.')
+  await m.reply(
+   '🎨 To create your personal Viora sticker pack, send the sticker/photo to @Stickers and use the pack creation flow there. '
+   'Telegram does not expose sticker-pack creation as a normal high-level Pyrogram type in this runtime.'
+  )
