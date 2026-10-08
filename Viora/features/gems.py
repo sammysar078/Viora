@@ -37,7 +37,7 @@ async def register(app, c):
         await api.invoice(m.from_user.id, 'Viora Gems', f'{n} gems', payload, 'INR',
                           [{'label': f'{n} Gems', 'amount': n * GEM_PRICE_INR * 100}], token)
 
-    @app.on_message(filters.successful_payment)
+    @app.on_message(filters.create(lambda _, __, m: bool(getattr(m, 'successful_payment', None))))
     async def gem_paid(_, m):
         sp = m.successful_payment
         payload = sp.invoice_payload or ''
