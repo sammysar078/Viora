@@ -1,0 +1,49 @@
+services:
+  - type: worker
+    name: viora
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: API_ID
+        sync: false
+      - key: API_HASH
+        sync: false
+      - key: BOT_TOKEN
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        value: Viora
+      - key: BOT_USERNAME
+        sync: false
+      - key: OWNER_IDS
+        sync: false
+      - key: PAYMENT_PROVIDER_TOKEN
+        sync: false
+      - key: LIBRETRANSLATE_URL
+        sync: false
+      - key: LIBRETRANSLATE_API_KEY
+        sync: false
+      - key: PREMIUM_STARS
+        value: "100"
+      - key: PREMIUM_DAYS
+        value: "30"
+      - key: GEM_PRICE_INR
+        value: "8"
+      - key: PROTECT_COST_PER_DAY
+        value: "500"
+      - key: CLAIM_REWARD
+        value: "1000"
+      - key: RAMPAGE_GEMS
+        value: "5"
+      - key: CLOAK_GEMS
+        value: "5"
+      - key: VAULT_GEMS
+        value: "5"
+      - key: JOIN_SECONDS
+        value: "120"
+      - key: CARD_TURN_SECONDS
+        value: "60"
+      - key: MAX_GAME_PLAYERS
+        value: "20"
