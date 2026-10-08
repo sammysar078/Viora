@@ -13,8 +13,18 @@ async def register(app,c):
   emoji=m.command[1].strip()
   if len(emoji)>16:return await m.reply('❌ Emoji is too long.')
   await e.c.update_one({'user_id':m.from_user.id},{'$set':{'emoji':emoji}}); await m.reply('✅ Custom emoji saved.')
- @app.on_pre_checkout_query()
- async def pre(_,q): await q.answer(True)
+ @app.on_raw_update()
+ async def pre(client, update, users, chats):
+  try:
+   from pyrogram.raw.types import UpdateBotPrecheckoutQuery
+   from pyrogram.raw.functions.messages import SetBotPrecheckoutResults
+   if isinstance(update, UpdateBotPrecheckoutQuery):
+    await client.invoke(SetBotPrecheckoutResults(
+     query_id=update.query_id,
+     success=True
+    ))
+  except Exception:
+   pass
  @app.on_message(filters.successful_payment)
  async def paid(_,m):
   sp=m.successful_payment
